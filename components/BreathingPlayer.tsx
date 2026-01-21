@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, Play, Pause, RotateCcw, Volume2, Eye, Hand, MoveHorizontal, MoveVertical } from 'lucide-react';
 import { ExerciseItem } from '../types';
@@ -76,21 +75,21 @@ const BreathingPlayer: React.FC<BreathingPlayerProps> = ({ onBack, exercise }) =
   };
 
   const renderIcon = () => {
-    if (exercise.type === 'breathing') return <div className="w-6 h-6 bg-white rounded-full opacity-20 animate-pulse"></div>;
+    if (exercise.type === 'breathing') return null;
     if (exercise.type === 'mindfulness') {
-      if (phase === 'sounds') return <Volume2 size={48} className="text-white opacity-80" />;
-      if (phase === 'colors') return <Eye size={48} className="text-white opacity-80" />;
-      if (phase === 'sensations') return <Hand size={48} className="text-white opacity-80" />;
+      if (phase === 'sounds') return <Volume2 size={48} className="text-white opacity-90" />;
+      if (phase === 'colors') return <Eye size={48} className="text-white opacity-90" />;
+      if (phase === 'sensations') return <Hand size={48} className="text-white opacity-90" />;
     }
     if (exercise.type === 'stretch') {
-       if (phase === 'right' || phase === 'left') return <MoveHorizontal size={48} className="text-white opacity-80" />;
-       if (phase === 'front') return <MoveVertical size={48} className="text-white opacity-80" />;
+       if (phase === 'right' || phase === 'left') return <MoveHorizontal size={48} className="text-white opacity-90" />;
+       if (phase === 'front') return <MoveVertical size={48} className="text-white opacity-90" />;
     }
     return null;
   };
 
   const getPhaseText = () => {
-    if (!isActive) return 'Pronto para começar?';
+    if (!isActive) return 'PRONTO PARA COMEÇAR?';
     if (exercise.type === 'breathing') {
       return phase === 'inspire' ? 'Inspire' : phase === 'hold' ? 'Segure' : 'Expire';
     }
@@ -123,26 +122,27 @@ const BreathingPlayer: React.FC<BreathingPlayerProps> = ({ onBack, exercise }) =
   };
 
   const getColors = () => {
-    if (exercise.type === 'breathing') return { main: 'bg-blue-600', shadow: 'shadow-blue-900/20', light: 'bg-blue-100', med: 'bg-blue-200' };
-    if (exercise.type === 'mindfulness') return { main: 'bg-purple-600', shadow: 'shadow-purple-900/20', light: 'bg-purple-100', med: 'bg-purple-200' };
-    return { main: 'bg-emerald-600', shadow: 'shadow-emerald-900/20', light: 'bg-emerald-100', med: 'bg-emerald-200' };
+    // Screenshot uses purple theme for Pausa Consciente
+    if (exercise.type === 'breathing') return { main: 'bg-blue-600', shadow: 'shadow-blue-900/10', light: 'bg-blue-50', med: 'bg-blue-100', text: 'text-blue-600' };
+    if (exercise.type === 'mindfulness') return { main: 'bg-indigo-600', shadow: 'shadow-indigo-900/10', light: 'bg-indigo-50', med: 'bg-indigo-100', text: 'text-indigo-600' };
+    return { main: 'bg-emerald-600', shadow: 'shadow-emerald-900/10', light: 'bg-emerald-50', med: 'bg-emerald-100', text: 'text-emerald-600' };
   };
 
   const colors = getColors();
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 animate-in fade-in duration-500">
-      <header className="p-6 flex items-center bg-white border-b border-slate-100">
-        <button onClick={onBack} className="p-2.5 -ml-2 text-slate-500 bg-slate-50 rounded-xl">
-          <ChevronLeft size={24} />
+    <div className="flex flex-col h-screen bg-slate-50 animate-fade-zoom overflow-hidden">
+      <header className="p-6 flex items-center bg-white border-b border-slate-50">
+        <button onClick={onBack} className="p-2 bg-slate-100 rounded-xl text-slate-500">
+          <ChevronLeft size={20} />
         </button>
-        <h1 className="flex-1 text-center font-bold text-slate-900 pr-10 tracking-tight">{exercise.title}</h1>
+        <h1 className="flex-1 text-center font-bold text-slate-800 text-sm tracking-wide mr-8">{exercise.title}</h1>
       </header>
 
-      <div className="flex-1 flex flex-col items-center justify-between py-16 px-8">
+      <div className="flex-1 flex flex-col items-center justify-center space-y-12 px-8">
         <div className="text-center space-y-2">
-          <p className="text-5xl font-black text-slate-900 tracking-tighter">{formatTime(timeLeft)}</p>
-          <p className={`${exercise.type === 'breathing' ? 'text-blue-600' : exercise.type === 'mindfulness' ? 'text-purple-600' : 'text-emerald-600'} uppercase tracking-[0.3em] text-[10px] font-black opacity-60`}>
+          <p className="text-6xl font-black text-slate-900 tracking-tighter">{formatTime(timeLeft)}</p>
+          <p className={`uppercase tracking-[0.2em] text-[11px] font-black ${colors.text} opacity-70`}>
             {getPhaseText()}
           </p>
         </div>
@@ -150,46 +150,46 @@ const BreathingPlayer: React.FC<BreathingPlayerProps> = ({ onBack, exercise }) =
         <div className="relative w-72 h-72 flex items-center justify-center">
           {/* Animated Background Rings */}
           <div 
-            className={`absolute ${colors.light} rounded-full w-48 h-48 opacity-10`}
-            style={{ transform: `scale(${scale * 1.5})`, transition: 'transform 4000ms cubic-bezier(0.4, 0, 0.2, 1)' }}
+            className={`absolute ${colors.light} rounded-full w-56 h-56 opacity-40`}
+            style={{ transform: `scale(${scale * 1.3})`, transition: 'transform 4000ms cubic-bezier(0.4, 0, 0.2, 1)' }}
           ></div>
           <div 
-            className={`absolute ${colors.med} rounded-full w-48 h-48 opacity-20`}
-            style={{ transform: `scale(${scale * 1.25})`, transition: 'transform 4000ms cubic-bezier(0.4, 0, 0.2, 1)' }}
+            className={`absolute ${colors.med} rounded-full w-56 h-56 opacity-50`}
+            style={{ transform: `scale(${scale * 1.15})`, transition: 'transform 4000ms cubic-bezier(0.4, 0, 0.2, 1)' }}
           ></div>
           
           {/* Main Breathing Circle */}
           <div 
-            className={`${colors.main} rounded-full w-44 h-44 flex items-center justify-center shadow-2xl ${colors.shadow} transition-transform duration-[4000ms] cubic-bezier(0.4, 0, 0.2, 1)`}
+            className={`${colors.main} rounded-full w-48 h-48 flex items-center justify-center shadow-2xl ${colors.shadow} transition-transform duration-[4000ms] cubic-bezier(0.4, 0, 0.2, 1)`}
             style={{ transform: `scale(${scale})` }}
           >
             {renderIcon()}
           </div>
         </div>
 
-        <div className="flex space-x-6 items-center">
+        <div className="flex space-x-4 items-center">
           <button 
             onClick={() => {
               setTimeLeft(exercise.duration * 60);
               setIsActive(false);
             }}
-            className="p-5 rounded-[1.5rem] bg-white border border-slate-200 text-slate-400 hover:text-slate-600 shadow-sm transition-all"
+            className="p-5 rounded-3xl bg-slate-100 text-slate-400 hover:text-slate-600 transition-all"
           >
             <RotateCcw size={24} />
           </button>
           <button 
             onClick={() => setIsActive(!isActive)}
-            className={`p-7 rounded-[2rem] text-white shadow-xl transition-all scale-110 ${
+            className={`p-6 px-10 rounded-[2rem] text-white shadow-xl transition-all ${
               isActive ? 'bg-slate-900 shadow-slate-900/20' : colors.main + ' ' + colors.shadow
             }`}
           >
-            {isActive ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1" />}
+            {isActive ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" />}
           </button>
         </div>
       </div>
 
-      <div className="p-10 text-center bg-white border-t border-slate-100 rounded-t-[3rem] shadow-sm">
-        <p className="text-slate-500 text-sm leading-relaxed font-medium px-4">
+      <div className="p-10 pb-16 text-center bg-white border-t border-slate-50 rounded-t-[3rem]">
+        <p className="text-slate-500 text-sm leading-relaxed font-medium">
           {getInstruction()}
         </p>
       </div>

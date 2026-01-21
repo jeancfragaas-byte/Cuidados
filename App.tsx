@@ -44,7 +44,6 @@ const App: React.FC = () => {
   const [selectedExercise, setSelectedExercise] = useState<ExerciseItem | null>(null);
   const [dailyReflection, setDailyReflection] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * STATIC_REFLECTIONS.length);
@@ -62,9 +61,7 @@ const App: React.FC = () => {
   };
 
   const filteredLibrary = CONTENTS.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !selectedCategory || item.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return item.title.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   const renderHome = () => (
@@ -72,9 +69,9 @@ const App: React.FC = () => {
       <header className="flex justify-between items-center">
         <div className="flex items-center">
           <Logo />
-          <div className="ml-2">
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight">SerSocial App</h1>
-            <p className="text-slate-500 text-sm font-semibold uppercase tracking-wider">Cuidado Profissional</p>
+          <div className="ml-3">
+            <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-1">SerSocial App</h1>
+            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.1em]">Cuidado Profissional</p>
           </div>
         </div>
         <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-teal-600 transition-all shadow-sm">
@@ -161,7 +158,7 @@ const App: React.FC = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         {filteredLibrary.map(content => (
           <button
             key={content.id}
@@ -197,7 +194,7 @@ const App: React.FC = () => {
                 <span className="text-[10px] text-teal-600 font-black uppercase tracking-widest">{selectedContent?.category}</span>
                 <h1 className="text-3xl font-black text-slate-900 leading-tight">{selectedContent?.title}</h1>
               </div>
-              <p className="text-slate-600 leading-relaxed text-lg">{selectedContent?.fullContent}</p>
+              <p className="text-slate-600 leading-relaxed text-lg whitespace-pre-line">{selectedContent?.fullContent}</p>
             </div>
           </div>
         );
@@ -262,7 +259,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center">
-      <div className="w-full max-w-lg min-h-screen relative shadow-2xl shadow-slate-200 bg-slate-50">
+      <div className="w-full max-w-lg min-h-screen relative shadow-2xl shadow-slate-200 bg-slate-50 overflow-hidden">
         {renderCurrentView()}
         {![View.BREATHING, View.CONTENT_DETAIL].includes(currentView) && (
           <Navigation currentView={currentView} setView={setCurrentView} />
