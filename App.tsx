@@ -11,7 +11,7 @@ import {
   PlayCircle
 } from 'lucide-react';
 import { View, ContentItem, ExerciseItem } from './types';
-import { CATEGORIES, CONTENTS, EXERCISES, TRAILS, STATIC_REFLECTIONS } from './constants.tsx';
+import { CONTENTS, EXERCISES, STATIC_REFLECTIONS } from './constants';
 import Navigation from './components/Navigation';
 import BreathingPlayer from './components/BreathingPlayer';
 
@@ -222,6 +222,12 @@ const App: React.FC = () => {
                 <span className="font-bold">Sair</span>
                 <LogOut size={18} />
               </button>
+            </div>
+            <div className="p-6 bg-slate-100 rounded-2xl">
+              <p className="text-[10px] text-slate-400 uppercase font-black mb-2 tracking-widest">Aviso Legal</p>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                Este aplicativo é uma ferramenta educativa de apoio ao bem-estar. Não substitui acompanhamento médico, psicológico ou terapêutico profissional.
+              </p>
             </div>
           </div>
         );
