@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Bell, 
@@ -104,9 +105,24 @@ const App: React.FC = () => {
             <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.1em]">Cuidado Profissional</p>
           </div>
         </div>
-        <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-teal-600 transition-all shadow-sm">
-          <Bell size={24} />
-        </button>
+        <div className="relative">
+          {mood ? (
+            <button 
+              onClick={() => setMood(null)}
+              className={`p-3 bg-white border border-slate-200 rounded-2xl transition-all shadow-sm ${
+                mood === 'bem' ? 'text-teal-500' : mood === 'neutro' ? 'text-amber-500' : 'text-rose-500'
+              }`}
+            >
+              {mood === 'bem' && <Smile size={24} />}
+              {mood === 'neutro' && <Meh size={24} />}
+              {mood === 'cansado' && <Frown size={24} />}
+            </button>
+          ) : (
+            <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-teal-600 transition-all shadow-sm">
+              <Bell size={24} />
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Cartão de Check-in Ocupacional */}
