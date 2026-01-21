@@ -9,6 +9,19 @@ export const CATEGORIES = [
   "Direitos e pausas"
 ];
 
+export const STATIC_REFLECTIONS = [
+  "O cuidado com o outro começa pelo respeito ao seu próprio ritmo.",
+  "Pequenas pausas ao longo do dia ajudam a manter a clareza mental.",
+  "Reconhecer seus limites é um sinal de maturidade profissional.",
+  "A qualidade do seu trabalho depende também do seu bem-estar.",
+  "Respire fundo. O momento presente é o único que você pode habitar agora.",
+  "Organizar sua rotina é uma forma simples de reduzir a ansiedade diária.",
+  "Desconectar-se após o expediente é essencial para a longevidade da carreira.",
+  "Sua saúde é a ferramenta mais importante de seu trabalho.",
+  "Permita-se alguns minutos de silêncio antes de iniciar a próxima tarefa.",
+  "O equilíbrio entre vida pessoal e profissional é um processo contínuo."
+];
+
 export const CONTENTS: ContentItem[] = [
   {
     id: '1',

@@ -11,25 +11,22 @@ import {
   PlayCircle
 } from 'lucide-react';
 import { View, ContentItem, ExerciseItem } from './types';
-import { CATEGORIES, CONTENTS, EXERCISES, TRAILS } from './constants.tsx';
+import { CATEGORIES, CONTENTS, EXERCISES, TRAILS, STATIC_REFLECTIONS } from './constants.tsx';
 import Navigation from './components/Navigation';
 import BreathingPlayer from './components/BreathingPlayer';
-import { getDailyReflection } from './geminiService';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.HOME);
   const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null);
   const [selectedExercise, setSelectedExercise] = useState<ExerciseItem | null>(null);
-  const [dailyReflection, setDailyReflection] = useState<string>("Carregando sua reflexão...");
+  const [dailyReflection, setDailyReflection] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchReflection = async () => {
-      const reflection = await getDailyReflection();
-      setDailyReflection(reflection);
-    };
-    fetchReflection();
+    // Seleciona uma frase aleatória da lista estática ao carregar o app
+    const randomIndex = Math.floor(Math.random() * STATIC_REFLECTIONS.length);
+    setDailyReflection(STATIC_REFLECTIONS[randomIndex]);
   }, []);
 
   const navigateToContent = (content: ContentItem) => {
@@ -63,7 +60,7 @@ const App: React.FC = () => {
       <div className="bg-gradient-to-br from-teal-600 to-teal-800 rounded-[2rem] p-8 text-white shadow-xl shadow-teal-900/10">
         <div className="flex items-center space-x-2 mb-4">
           <Info size={16} className="opacity-70" />
-          <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Reflexão do dia</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Reflexão do momento</span>
         </div>
         <p className="text-xl md:text-2xl font-medium leading-relaxed italic">
           "{dailyReflection}"
