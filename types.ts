@@ -6,7 +6,8 @@ export enum View {
   SETTINGS = 'settings',
   CONTENT_DETAIL = 'content_detail',
   BREATHING = 'breathing',
-  TRAILS = 'trails'
+  TRAILS = 'trails',
+  JOURNEY_TIMER = 'journey_timer'
 }
 
 export interface ContentItem {

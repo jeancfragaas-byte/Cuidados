@@ -13,12 +13,15 @@ import {
   Smile,
   Meh,
   Frown,
-  Zap
+  Zap,
+  Timer as TimerIcon,
+  Pause
 } from 'lucide-react';
 import { View, ContentItem, ExerciseItem } from './types';
 import { CONTENTS, EXERCISES, STATIC_REFLECTIONS } from './constants';
 import Navigation from './components/Navigation';
 import BreathingPlayer from './components/BreathingPlayer';
+import JourneyTimer from './components/JourneyTimer';
 
 const Logo = () => (
   <svg viewBox="0 0 100 100" className="w-14 h-14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,6 +47,33 @@ const App: React.FC = () => {
   const [dailyReflection, setDailyReflection] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState('');
   
+  // Estado do Cronômetro Globalizado para exibição no Header
+  const [timerStatus, setTimerStatus] = useState<string>(() => localStorage.getItem('sersocial_timer_status') || 'idle');
+  const [timerElapsed, setTimerElapsed] = useState<number>(() => parseInt(localStorage.getItem('sersocial_timer_elapsed') || '0', 10));
+
+  // Sincronização do Cronômetro no Header
+  useEffect(() => {
+    let interval: number;
+    if (timerStatus === 'running') {
+      interval = window.setInterval(() => {
+        const current = parseInt(localStorage.getItem('sersocial_timer_elapsed') || '0', 10);
+        setTimerElapsed(current);
+        setTimerStatus(localStorage.getItem('sersocial_timer_status') || 'idle');
+      }, 1000);
+    } else {
+      setTimerStatus(localStorage.getItem('sersocial_timer_status') || 'idle');
+      setTimerElapsed(parseInt(localStorage.getItem('sersocial_timer_elapsed') || '0', 10));
+    }
+    return () => clearInterval(interval);
+  }, [timerStatus, currentView]);
+
+  const formatShortTime = (totalSeconds: number) => {
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    if (hrs > 0) return `${hrs}h ${mins}m`;
+    return `${mins}m`;
+  };
+
   // Estado Local (Salvo no Navegador)
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem('sersocial_favorites');
@@ -100,9 +130,25 @@ const App: React.FC = () => {
       <header className="flex justify-between items-center">
         <div className="flex items-center">
           <Logo />
-          <div className="ml-3">
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-1">SerSocial App</h1>
-            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.1em]">Cuidado Profissional</p>
+          <div className="ml-3 flex flex-col">
+            <div className="flex items-center space-x-2">
+              <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none">SerSocial App</h1>
+              {/* Atalho Visual do Cronômetro no Header conforme solicitado */}
+              {(timerStatus === 'running' || timerStatus === 'paused') && (
+                <button 
+                  onClick={() => setCurrentView(View.JOURNEY_TIMER)}
+                  className={`flex items-center space-x-1.5 px-2 py-1 rounded-full border text-[9px] font-black uppercase tracking-tighter transition-all animate-in fade-in slide-in-from-left-2 ${
+                    timerStatus === 'running' 
+                      ? 'bg-teal-50 border-teal-100 text-teal-600' 
+                      : 'bg-amber-50 border-amber-100 text-amber-600'
+                  }`}
+                >
+                  {timerStatus === 'running' ? <TimerIcon size={10} className="animate-pulse" /> : <Pause size={10} />}
+                  <span>{formatShortTime(timerElapsed)}</span>
+                </button>
+              )}
+            </div>
+            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.1em] mt-1">Cuidado Profissional</p>
           </div>
         </div>
         <div className="relative">
@@ -176,13 +222,13 @@ const App: React.FC = () => {
         <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Atalhos Rápidos</h2>
         <div className="grid grid-cols-2 gap-4">
           <button 
-            onClick={() => startExercise(EXERCISES[0])}
+            onClick={() => setCurrentView(View.JOURNEY_TIMER)}
             className="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm hover:scale-[1.02] transition-all group"
           >
-            <div className="bg-blue-50 p-4 rounded-2xl mb-3 text-blue-500 group-hover:scale-110 transition-transform">
-              <Clock size={28} />
+            <div className="bg-teal-50 p-4 rounded-2xl mb-3 text-teal-600 group-hover:scale-110 transition-transform">
+              <TimerIcon size={28} />
             </div>
-            <span className="text-sm font-bold text-slate-800">Pausa</span>
+            <span className="text-sm font-bold text-slate-800">Jornada</span>
           </button>
           <button 
             onClick={() => setCurrentView(View.TRAILS)}
@@ -329,6 +375,8 @@ const App: React.FC = () => {
         );
       case View.BREATHING: 
         return <BreathingPlayer exercise={selectedExercise || EXERCISES[0]} onBack={() => setCurrentView(View.EXERCISES)} />;
+      case View.JOURNEY_TIMER:
+        return <JourneyTimer onBack={() => setCurrentView(View.HOME)} />;
       case View.SETTINGS:
         return (
           <div className="px-6 py-8 space-y-8 pb-32 animate-fade-zoom">
@@ -366,7 +414,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center">
       <div className="w-full max-w-lg min-h-screen relative shadow-2xl shadow-slate-200 bg-slate-50 overflow-hidden">
         {renderCurrentView()}
-        {![View.BREATHING, View.CONTENT_DETAIL].includes(currentView) && (
+        {![View.BREATHING, View.CONTENT_DETAIL, View.JOURNEY_TIMER].includes(currentView) && (
           <Navigation currentView={currentView} setView={setCurrentView} />
         )}
       </div>
