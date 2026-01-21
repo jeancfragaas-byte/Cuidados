@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Bell, 
@@ -15,6 +14,30 @@ import { CONTENTS, EXERCISES, STATIC_REFLECTIONS } from './constants';
 import Navigation from './components/Navigation';
 import BreathingPlayer from './components/BreathingPlayer';
 
+const Logo = () => (
+  <svg viewBox="0 0 100 100" className="w-14 h-14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Base */}
+    <path d="M35 78C35 76.8954 35.8954 76 37 76H63C64.1046 76 65 76.8954 65 78V81H35V78Z" fill="#1B3131"/>
+    <rect x="42" y="73" width="16" height="3" fill="#1B3131"/>
+    {/* Stand */}
+    <rect x="48.5" y="48" width="3" height="25" fill="#1B3131"/>
+    <circle cx="50" cy="48" r="2.5" fill="#1B3131"/>
+    <circle cx="50" cy="62" r="2" fill="#1B3131"/>
+    <circle cx="50" cy="68" r="2" fill="#1B3131"/>
+    {/* Arms */}
+    <path d="M33 45L47 48" stroke="#1B3131" strokeWidth="2.5" strokeLinecap="round"/>
+    <path d="M67 45L53 48" stroke="#1B3131" strokeWidth="2.5" strokeLinecap="round"/>
+    {/* Scales */}
+    <path d="M26 51C26 56.5228 30.4772 61 36 61C41.5228 61 46 56.5228 46 51H26Z" fill="#2C5F5F"/>
+    <path d="M54 51C54 56.5228 58.4772 61 64 61C69.5228 61 74 56.5228 74 51H54Z" fill="#2C5F5F"/>
+    {/* Flame */}
+    <path d="M50 22C50 22 41 31 41 38C41 42.9706 45.0294 47 50 47C54.9706 47 59 42.9706 59 38C59 31 50 22 50 22Z" fill="#FF8A00"/>
+    <path d="M50 28C50 28 45 33 45 38C45 40.7614 47.2386 43 50 43C52.7614 43 55 40.7614 55 38C55 33 50 28 50 28Z" fill="#FFD600"/>
+    <circle cx="43" cy="28" r="1.5" fill="#FF8A00"/>
+    <circle cx="57" cy="28" r="1.5" fill="#FF8A00"/>
+  </svg>
+);
+
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.HOME);
   const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null);
@@ -24,7 +47,6 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    // Seleciona uma frase aleatória da lista estática ao carregar o app
     const randomIndex = Math.floor(Math.random() * STATIC_REFLECTIONS.length);
     setDailyReflection(STATIC_REFLECTIONS[randomIndex]);
   }, []);
@@ -48,9 +70,12 @@ const App: React.FC = () => {
   const renderHome = () => (
     <div className="px-6 py-8 space-y-8 pb-32 animate-fade-zoom">
       <header className="flex justify-between items-center">
-        <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">SerSocial</h1>
-          <p className="text-slate-500 text-sm font-semibold uppercase tracking-wider">Bem-estar Profissional</p>
+        <div className="flex items-center">
+          <Logo />
+          <div className="ml-2">
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight">SerSocial App</h1>
+            <p className="text-slate-500 text-sm font-semibold uppercase tracking-wider">Cuidado Profissional</p>
+          </div>
         </div>
         <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-teal-600 transition-all shadow-sm">
           <Bell size={24} />
